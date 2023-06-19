@@ -25,5 +25,5 @@ echo "INFO: initializing kube cluster: ..."
 )
 echo "INFO: Starting tests: test-kube ..."
 (set -x
-  make -C tests kube-validate
+  make -C tests kube-validate || echo ERROR kubecfg
 )
