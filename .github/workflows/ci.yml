@@ -23,5 +23,4 @@ jobs:
     steps:
       - name: Report
         uses: actions/upload-artifact@v3
-        with:
-          name: /tmp/artifacts/report.txt
+        path: /tmp/artifacts/report.txt
