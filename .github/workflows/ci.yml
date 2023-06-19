@@ -17,10 +17,7 @@ jobs:
         run: |
           make -C tests tests
         id: make_tests
-  report:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
+
       - name: Report
         uses: actions/upload-artifact@v3
         with:
