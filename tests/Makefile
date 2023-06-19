@@ -57,7 +57,7 @@ PROJECT=kubelibsonnet
 tests: $(patsubst %,e2e-tests-%,$(E2E_K3S_VERSIONS))
 	@echo "SUCCESS: verified Kubernetes versions:"
 	@cat $(TMP_RANCHER)/report.txt
-	@test -n "$${GITHUB_ACTIONS}" || exit 0; mkdir -p /tmp/artifacts && cp $(TMP_RANCHER)/report.txt /tmp/artifacts/report.txt
+	@test -n "$${GITHUB_ACTIONS}" || exit 0; mkdir -p github/artifacts && cp -v $(TMP_RANCHER)/report.txt github/artifacts/report.txt
 	@rm -rf ./$(TMP_RANCHER)
 
 # These target is dynamically driven from e2e-test-% above, run as
