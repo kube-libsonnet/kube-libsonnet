@@ -2,9 +2,10 @@
 
 # kube-libsonnet
 
-This repository was originally forked from the
+This repository was originally forked from Bitnami's
 [kube-libsonnet](https://github.com/bitnami-labs/kube-libsonnet)
-project.
+project on June/2023, in an effort to keep it up-to-date with the latest
+Kubernetes releases.
 
 Accordingly, above `kube-manifests` has been changed to use this repo as
 a git submodule, i.e.:
