@@ -1,13 +1,11 @@
-## WARNING: This repository is no longer actively maintained by Bitnami/VMware.
-We have made the difficult decision to stop driving this project and therefore we will no longer actively respond to issues or pull requests. If you would like to take over maintaining this project independently from Bitnami/VMware, please let us know so we can add a link to your forked project here.
+[![Build Status](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci.yml/badge.svg)](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci.yml)
 
-[![Build Status](https://travis-ci.org/bitnami-labs/kube-libsonnet.svg?branch=master)](https://travis-ci.org/bitnami-labs/kube-libsonnet)
 # kube-libsonnet
 
-This repo has been originally populated by the `lib/` folder contents
-from `https://github.com/bitnami-labs/kube-manifests` as of Mar/2018,
-aiming to provide a library of `jsonnet` manifests for common
-Kubernetes objects (such as `Deployment`, `Service`, `Ingress`, etc).
+This repository was originally forked from Bitnami's
+[kube-libsonnet](https://github.com/bitnami-labs/kube-libsonnet)
+project on June/2023, in an effort to keep it up-to-date with the latest
+Kubernetes releases.
 
 Accordingly, above `kube-manifests` has been changed to use this repo as
 a git submodule, i.e.:

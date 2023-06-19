@@ -57,6 +57,7 @@ PROJECT=kubelibsonnet
 tests: $(patsubst %,e2e-tests-%,$(E2E_K3S_VERSIONS))
 	@echo "SUCCESS: verified Kubernetes versions:"
 	@cat $(TMP_RANCHER)/report.txt
+	@test -n "$${GITHUB_ACTIONS}" || exit 0; mkdir -p github/artifacts && cp -v $(TMP_RANCHER)/report.txt github/artifacts/report.txt
 	@rm -rf ./$(TMP_RANCHER)
 
 # These target is dynamically driven from e2e-test-% above, run as
@@ -103,7 +104,7 @@ golden-diff: diff-help $(PHONY_DIFF)
 # Used to initialize docker'ized KubeAPI via k3s
 kube-init: req-kubectl req-kubecfg
 	kubectl version --short | grep k3s # void falsely initializing live clusters
-	kubecfg update init-kube.jsonnet
+	kubecfg update init-kube.jsonnet && exit 0; rc=$$?; echo ERROR kubecfg; exit $$rc
 
 kube-validate: req-kubectl req-kubecfg
 	timeout 10 kubectl api-versions > /dev/null \

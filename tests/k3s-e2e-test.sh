@@ -18,6 +18,9 @@ until kubectl get nodes; do
     /tmp/rancher/k3s.yaml /tmp/rancher/etc/k3s.yaml \
     > ${KUBECONFIG:?} 2>/dev/null
 done
+until kubectl get crd; do
+  sleep 1
+done
 )
 echo "INFO: initializing kube cluster: ..."
 (set -x
