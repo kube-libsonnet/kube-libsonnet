@@ -8,7 +8,7 @@ ARG kubecfg_version=v0.14.0
 RUN install_packages jq make curl ca-certificates
 RUN adduser --home /home/user --disabled-password --gecos User user
 
-RUN curl -sLo /tmp/jsonnet-v${jsonnet_version}.tar.gz https://github.com/google/jsonnet/releases/download/v${jsonnet_version}/jsonnet-bin-v${jsonnet_version}-linux.tar.gz
+RUN curl -sLo /tmp/jsonnet-v${jsonnet_version}.tar.gz https://github.com/google/go-jsonnet/releases/download/v${jsonnet_version}/go-jsonnet_${jsonnet_version}_Linux_x86_64.tar.gz
 RUN tar -zxf /tmp/jsonnet-v${jsonnet_version}.tar.gz -C /tmp && mv /tmp/jsonnet /tmp/jsonnetfmt /usr/local/bin
 
 RUN curl -sLo /usr/local/bin/kubectl https://storage.googleapis.com/kubernetes-release/release/${kubectl_version}/bin/linux/amd64/kubectl
