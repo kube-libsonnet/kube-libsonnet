@@ -15,5 +15,13 @@ jobs:
 
       - name: Run integration tests via docker-compose
         run: |
-          #docker-compose -f tests/docker-compose.yml up --build
           make -C tests tests
+        id: make_tests
+  report:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: /tmp/artifacts/report.txt
