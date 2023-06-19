@@ -11,13 +11,16 @@ K3S_V1_19=v1.19.11-k3s1
 K3S_V1_20=v1.20.7-k3s1
 K3S_V1_21=v1.21.1-k3s1
 K3S_V1_22=v1.22.2-k3s1
+K3S_V1_23=v1.23.17-k3s1
+K3S_V1_24=v1.24.14-k3s1
+K3S_V1_25=v1.25.10-k3s1
 #
 # Since https://github.com/bitnami-labs/kube-libsonnet/issues/32 we only support
 # kubernetes v1.14+ (Ingress apiVersion deprecated in v1.18, available since v1.14).
 #
 # Kubernetes releases we cover with e2e testing,
 # we'll run `docker-compose` for each to below rancher/k3s versions (tags)
-E2E_K3S_VERSIONS=$(K3S_V1_19) $(K3S_V1_20) $(K3S_V1_21) $(K3S_V1_22)
+E2E_K3S_VERSIONS=$(K3S_V1_22) $(K3S_V1_23) $(K3S_V1_24) $(K3S_V1_25)
 
 SHELL=/bin/bash
 # Rather arbitrary Bitnami style choice
@@ -139,6 +142,9 @@ fix-lint: req-jsonnetfmt
 req-%:
 	@which $(*) >/dev/null && exit 0; echo "ERROR: '$(*)' is required in PATH"; exit 1
 
-gen-golden: $(PHONY_GOLDEN)
+clean-golden:
+	rm -f $(PHONY_GOLDEN)
 
-.PHONY: unittests lint eval-pass eval-fail validate golden-diff %.eval-pass %.evail-fail %.diff golden/%.json diff-help fix-lint gen-golden
+gen-golden: clean-golden $(PHONY_GOLDEN)
+
+.PHONY: unittests lint eval-pass eval-fail validate golden-diff %.eval-pass %.evail-fail %.diff golden/%.json diff-help fix-lint gen-golden clean-golden

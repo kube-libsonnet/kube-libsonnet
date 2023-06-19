@@ -17,7 +17,7 @@
          }
       },
       {
-         "apiVersion": "batch/v1beta1",
+         "apiVersion": "batch/v1",
          "kind": "CronJob",
          "metadata": {
             "annotations": { },
@@ -80,7 +80,6 @@
          },
          "spec": {
             "minReadySeconds": 30,
-            "replicas": 1,
             "revisionHistoryLimit": 10,
             "selector": {
                "matchLabels": {
@@ -200,7 +199,7 @@
          }
       },
       {
-         "apiVersion": "policy/v1beta1",
+         "apiVersion": "policy/v1",
          "kind": "PodDisruptionBudget",
          "metadata": {
             "annotations": { },
