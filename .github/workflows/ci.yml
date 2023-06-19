@@ -21,4 +21,4 @@ jobs:
       - name: Report
         uses: actions/upload-artifact@v3
         with:
-          path: /tmp/artifacts/report.txt
+          path: github/artifacts/report.txt
