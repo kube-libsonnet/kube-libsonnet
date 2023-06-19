@@ -1,8 +1,8 @@
 FROM bitnami/minideb:buster
-MAINTAINER sre@bitnami.com
+MAINTAINER juanjosec@gmail.com
 
-ARG jsonnet_version=0.14.0
-ARG kubectl_version=v1.17.0
+ARG jsonnet_version=0.20.0
+ARG kubectl_version=v1.23.5
 ARG kubecfg_version=v0.14.0
 
 RUN install_packages jq make curl ca-certificates
