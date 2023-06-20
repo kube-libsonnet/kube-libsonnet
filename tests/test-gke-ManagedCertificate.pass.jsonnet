@@ -1,8 +1,8 @@
-local kube = import "../kube-platforms.libsonnet";
+local kube = import '../kube-platforms.libsonnet';
 local stack = {
-  foocert: kube.gke.ManagedCertificate("foo") {
+  foocert: kube.gke.ManagedCertificate('foo') {
     spec+: {
-      domains: ["foo.example.com"],
+      domains: ['foo.example.com'],
     },
   },
 };
