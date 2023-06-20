@@ -36,8 +36,8 @@ PROJECT=kubelibsonnet
 # to (also) avoid the need for local tools install, see ./Dockerfile
 tests: $(patsubst %,e2e-tests-%,$(E2E_K3S_VERSIONS))
 	@echo "SUCCESS: verified Kubernetes versions:"
-	@cat $(TMP_RANCHER)/report.txt
-	@test -n "$${GITHUB_ACTIONS}" || exit 0; mkdir -p github/artifacts && cp -v $(TMP_RANCHER)/report.txt github/artifacts/report.txt
+	@cat $(TMP_RANCHER)/report*.txt
+	@test -n "$${GITHUB_ACTIONS}" || exit 0; mkdir -p github/artifacts && cat $(TMP_RANCHER)/report*.txt >> github/artifacts/report.txt
 	@rm -rf ./$(TMP_RANCHER)
 
 update-gh-files:
