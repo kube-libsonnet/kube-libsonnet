@@ -1,7 +1,8 @@
 SHELL=/bin/bash
 # Edit tests/kube-versions.libsonnet to update the Kubernetes versions
 # we run integration tests for.
-E2E_K3S_VERSIONS=$(shell jsonnet  -e 'std.join(" ",(import "kube-versions.libsonnet").k3sTags)'|xargs)
+-include Makefile.versions
+#E2E_K3S_VERSIONS=$(shell jsonnet  -e 'std.join(" ",(import "kube-versions.libsonnet").k3sTags)'|xargs)
 E2E_K8S_VERSIONS=$(shell jsonnet  -e 'std.join(" ",(import "kube-versions.libsonnet").kubeVersions)'|xargs)
 
 JSONNET_FMT=
@@ -40,9 +41,10 @@ tests: $(patsubst %,e2e-tests-%,$(E2E_K3S_VERSIONS))
 	@test -n "$${GITHUB_ACTIONS}" || exit 0; mkdir -p github/artifacts && cat $(TMP_RANCHER)/report*.txt >> github/artifacts/report.txt
 	@rm -rf ./$(TMP_RANCHER)
 
-update-gh-files:
+update-versions:
 	rm -f ../.github/workflows/ci-v*.yml
 	jsonnet  -m ../.github/workflows -e '(import "kube-versions.libsonnet").ghWorkflowFiles'
+	echo "E2E_K3S_VERSIONS=$$(jsonnet  -e 'std.join(" ",(import "kube-versions.libsonnet").k3sTags)'|xargs)" > Makefile.versions
 	sed -i '/^Tested Kubernetes versions:/s/:.*/: $(E2E_K8S_VERSIONS)/' ../README.md
 
 # These target is dynamically driven from e2e-test-% above, run as
@@ -133,4 +135,4 @@ clean-golden:
 
 gen-golden: clean-golden $(PHONY_GOLDEN)
 
-.PHONY: unittests lint eval-pass eval-fail validate golden-diff %.eval-pass %.evail-fail %.diff golden/%.json diff-help fix-lint gen-golden clean-golden update-gh-files
+.PHONY: unittests lint eval-pass eval-fail validate golden-diff %.eval-pass %.evail-fail %.diff golden/%.json diff-help fix-lint gen-golden clean-golden update-versions
