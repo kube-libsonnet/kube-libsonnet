@@ -26,7 +26,7 @@
          ]
       }
    },
-   "name": "CI v1.25",
+   "name": "CI v1_25",
    "on": [
       "push",
       "pull_request"

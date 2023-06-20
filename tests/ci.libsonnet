@@ -1,6 +1,6 @@
 {
   genCI(params):: {
-    name: 'CI %(kubeVersion)s' % params,
+    name: 'CI %s' % std.strReplace(params.kubeVersion, '.', '_'),
     on: [
       'push',
       'pull_request',
