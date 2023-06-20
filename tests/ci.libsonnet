@@ -19,7 +19,7 @@
             uses: 'docker/setup-buildx-action@v1',
           },
           {
-            name: 'Run %(kubeVersion)s integration tests via docker-compose' % params,
+            name: 'Run %(kubeVersion)s integration tests via docker-compose using %(k3sTag)s image' % params,
             run: |||
               make -C tests e2e-tests-%(k3sTag)s
             ||| % params,

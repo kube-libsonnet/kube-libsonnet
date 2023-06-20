@@ -13,7 +13,7 @@
             },
             {
                "id": "make_tests",
-               "name": "Run v1.25 integration tests via docker-compose",
+               "name": "Run v1.25 integration tests via docker-compose using v1.25.10-k3s1 image",
                "run": "make -C tests e2e-tests-v1.25.10-k3s1\n"
             }
          ]
