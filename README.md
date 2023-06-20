@@ -7,6 +7,12 @@ This repository was originally forked from Bitnami's
 project on June/2023, in an effort to keep it up-to-date with the latest
 Kubernetes releases.
 
+## Tests
+
+Unit and integration tests are run via Github workflows.
+
+Tested Kubernetes versions: v1.22 v1.23 v1.24 v1.25
+
 ## Using this repository
 
 ### jsonnet-bundler
@@ -88,4 +94,4 @@ setup at node, will run a `k3s` "dummy" container to serve Kube API,
 If you don't want that full kube-api stack (will then use your "local"
 kubernetes configured environment), you can run:
 
-    make -C tests local-tests kube-validate
+    make -C tests update-versions local-tests kube-validate

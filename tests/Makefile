@@ -1,31 +1,10 @@
-# K3S_<KUBE_MAJOR_RELEASE> as a "mapping" from KUBE_MAJOR_RELEASE to k3s tag,
-# from https://hub.docker.com/r/rancher/k3s/tags
-# K3S_V1_13=v0.3.0 # no-more to support v1.18 previous Ingress apiVersion deprecation
-K3S_V1_14=v0.8.0
-K3S_V1_15=v0.9.0
-K3S_V1_16=v1.0.1
-# Since v1.17 k3s image tags follow Kubernetes releases numbering
-K3S_V1_17=v1.17.17-k3s1
-K3S_V1_18=v1.18.19-k3s1
-K3S_V1_19=v1.19.11-k3s1
-K3S_V1_20=v1.20.7-k3s1
-K3S_V1_21=v1.21.1-k3s1
-K3S_V1_22=v1.22.2-k3s1
-K3S_V1_23=v1.23.17-k3s1
-K3S_V1_24=v1.24.14-k3s1
-K3S_V1_25=v1.25.10-k3s1
-#
-# Since https://github.com/bitnami-labs/kube-libsonnet/issues/32 we only support
-# kubernetes v1.14+ (Ingress apiVersion deprecated in v1.18, available since v1.14).
-#
-# Kubernetes releases we cover with e2e testing,
-# we'll run `docker-compose` for each to below rancher/k3s versions (tags)
-E2E_K3S_VERSIONS=$(K3S_V1_22) $(K3S_V1_23) $(K3S_V1_24) $(K3S_V1_25)
-
 SHELL=/bin/bash
-# Rather arbitrary Bitnami style choice
-OLD_JSONNET_FMT=--indent 2 --string-style d --comment-style s --no-pad-arrays --pad-objects --pretty-field-names
-# Reset kube-libsonnet/kube-libsonnet to a clean jsonnetfmt (re)start --jjo, 2023-06-20
+# Edit tests/kube-versions.libsonnet to update the Kubernetes versions
+# we run integration tests for.
+-include Makefile.versions
+#E2E_K3S_VERSIONS=$(shell jsonnet  -e 'std.join(" ",(import "kube-versions.libsonnet").k3sTags)'|xargs)
+E2E_K8S_VERSIONS=$(shell jsonnet  -e 'std.join(" ",(import "kube-versions.libsonnet").kubeVersions)'|xargs)
+
 JSONNET_FMT=
 
 LIB_JSONNET=$(wildcard ../*.libsonnet)
@@ -58,9 +37,15 @@ PROJECT=kubelibsonnet
 # to (also) avoid the need for local tools install, see ./Dockerfile
 tests: $(patsubst %,e2e-tests-%,$(E2E_K3S_VERSIONS))
 	@echo "SUCCESS: verified Kubernetes versions:"
-	@cat $(TMP_RANCHER)/report.txt
-	@test -n "$${GITHUB_ACTIONS}" || exit 0; mkdir -p github/artifacts && cp -v $(TMP_RANCHER)/report.txt github/artifacts/report.txt
+	@cat $(TMP_RANCHER)/report*.txt
+	@test -n "$${GITHUB_STEP_SUMMARY}" || exit 0; cat $(TMP_RANCHER)/report*.txt >> "$${GITHUB_STEP_SUMMARY}"
 	@rm -rf ./$(TMP_RANCHER)
+
+update-versions:
+	rm -f ../.github/workflows/ci-v*.yml
+	jsonnet  -m ../.github/workflows -e '(import "kube-versions.libsonnet").ghWorkflowFiles'
+	echo "E2E_K3S_VERSIONS=$$(jsonnet  -e 'std.join(" ",(import "kube-versions.libsonnet").k3sTags)'|xargs)" > Makefile.versions
+	sed -i '/^Tested Kubernetes versions:/s/:.*/: $(E2E_K8S_VERSIONS)/' ../README.md
 
 # These target is dynamically driven from e2e-test-% above, run as
 # e.g. `e2e-tests-v1.17.2-k3s1`
@@ -150,4 +135,4 @@ clean-golden:
 
 gen-golden: clean-golden $(PHONY_GOLDEN)
 
-.PHONY: unittests lint eval-pass eval-fail validate golden-diff %.eval-pass %.evail-fail %.diff golden/%.json diff-help fix-lint gen-golden clean-golden
+.PHONY: unittests lint eval-pass eval-fail validate golden-diff %.eval-pass %.evail-fail %.diff golden/%.json diff-help fix-lint gen-golden clean-golden update-versions

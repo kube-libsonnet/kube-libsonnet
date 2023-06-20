@@ -1,9 +1,9 @@
 ---
-name: CI
+name: CI kube-all
 on: [push, pull_request]
 
 jobs:
-  build:
+  test-all:
     runs-on: ubuntu-latest
 
     steps:

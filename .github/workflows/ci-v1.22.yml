@@ -1,0 +1,27 @@
+{
+   "jobs": {
+      "kube-v1_22": {
+         "runs-on": "ubuntu-latest",
+         "steps": [
+            {
+               "name": "Checkout code",
+               "uses": "actions/checkout@v2"
+            },
+            {
+               "name": "Setup Docker",
+               "uses": "docker/setup-buildx-action@v1"
+            },
+            {
+               "id": "make_tests",
+               "name": "Run v1.22 integration tests via docker-compose using v1.22.2-k3s1 image",
+               "run": "make -C tests e2e-tests-v1.22.2-k3s1\n"
+            }
+         ]
+      }
+   },
+   "name": "CI kube-v1.22",
+   "on": [
+      "push",
+      "pull_request"
+   ]
+}
