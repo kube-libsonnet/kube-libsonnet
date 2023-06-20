@@ -1,8 +1,8 @@
-local kube = import "../kube.libsonnet";
+local kube = import '../kube.libsonnet';
 local stack = {
-  sealedsecret: kube.SealedSecret("foo") {
+  sealedsecret: kube.SealedSecret('foo') {
     spec+: {
-      bar: std.parseJson(importstr "test-sealedsecrets.json"),
+      bar: std.parseJson(importstr 'test-sealedsecrets.json'),
     },
   },
 };

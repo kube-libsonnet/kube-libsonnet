@@ -1,80 +1,80 @@
-local bitnami = import "../bitnami.libsonnet";
-local kube = import "../kube.libsonnet";
-local utils = import "../utils.libsonnet";
+local bitnami = import '../bitnami.libsonnet';
+local kube = import '../kube.libsonnet';
+local utils = import '../utils.libsonnet';
 
 // Just a simple stack to exercise our kube.libsonnet
 // objects, output is saved to tests/golden/test-simple-validate.pass.json
 // to assert textual diff output.
 local stack = {
-  namespace:: "foons",
-  name:: "foo",
+  namespace:: 'foons',
+  name:: 'foo',
 
   ns: kube.Namespace($.namespace),
 
-  sa: kube.ServiceAccount($.name + "-sa") {
+  sa: kube.ServiceAccount($.name + '-sa') {
     metadata+: { namespace: $.namespace },
   },
 
-  role: kube.Role($.name + "-role") {
+  role: kube.Role($.name + '-role') {
     metadata+: { namespace: $.namespace },
     rules: [{
-      apiGroups: [""],
-      resources: ["pods", "secrets", "configmaps", "persistentvolumeclaims"],
-      verbs: ["get"],
+      apiGroups: [''],
+      resources: ['pods', 'secrets', 'configmaps', 'persistentvolumeclaims'],
+      verbs: ['get'],
     }, {
-      apiGroups: [""],
-      resources: ["pods"],
-      verbs: ["patch"],
+      apiGroups: [''],
+      resources: ['pods'],
+      verbs: ['patch'],
     }],
   },
 
-  rolebinding: kube.RoleBinding($.name + "-rolebinding") {
+  rolebinding: kube.RoleBinding($.name + '-rolebinding') {
     metadata+: { namespace: $.namespace },
     roleRef_: $.role,
     subjects_+: [$.sa],
   },
 
-  config: kube.ConfigMap($.name + "-config") {
+  config: kube.ConfigMap($.name + '-config') {
     metadata+: { namespace: $.namespace },
     data: {
-      foo_key: "bar_val",
+      foo_key: 'bar_val',
     },
   },
 
-  secret: kube.Secret($.name + "-secret") {
+  secret: kube.Secret($.name + '-secret') {
     metadata+: { namespace: $.namespace },
     data: {
-      sec_key: "c2VjcmV0Cg==",
+      sec_key: 'c2VjcmV0Cg==',
     },
   },
 
   // NB: making up an Ingress pointing to $.deploy Pod
-  service: kube.Service($.name + "-svc") {
+  service: kube.Service($.name + '-svc') {
     metadata+: { namespace: $.namespace },
     target_pod: $.deploy.spec.template,
   },
 
-  ingress: bitnami.Ingress($.name + "-ingress") {
+  ingress: bitnami.Ingress($.name + '-ingress') {
     metadata+: { namespace: $.namespace },
-    host: "foo.g.dev.bitnami.net",
+    host: 'foo.g.dev.bitnami.net',
     target_svc: $.service,
   },
 
   // An ingress with multiple hosts but none of the hosts specifies a path (#54).
-  pathlessIngress: kube.Ingress($.name + "-pathless-ingress") {
+  pathlessIngress: kube.Ingress($.name + '-pathless-ingress') {
     metadata+: { namespace: $.namespace },
     spec+: {
       rules+: [
         {
-          host: "a.example.com",
+          host: 'a.example.com',
           http: {
             paths: [{
-              pathType: "ImplementationSpecific",
+              pathType: 'ImplementationSpecific',
               backend: {
                 service: {
-                  name: "service-a",
+                  name: 'service-a',
                   port: {
-                    name: "web",
+                    name: 'web',
                   },
                 },
               },
@@ -82,15 +82,15 @@ local stack = {
           },
         },
         {
-          host: "b.example.com",
+          host: 'b.example.com',
           http: {
             paths: [{
-              pathType: "ImplementationSpecific",
+              pathType: 'ImplementationSpecific',
               backend: {
                 service: {
-                  name: "service-2",
+                  name: 'service-2',
                   port: {
-                    name: "web",
+                    name: 'web',
                   },
                 },
               },
@@ -102,22 +102,22 @@ local stack = {
   },
 
   // NB: just a simple example pod
-  pod: kube.Pod($.name + "-pod") {
+  pod: kube.Pod($.name + '-pod') {
     metadata+: { namespace: $.namespace },
     spec+: {
       containers_+: {
         foo_cont: kube.Container($.name) {
-          image: "nginx:1.12",
+          image: 'nginx:1.12',
           env_+: {
-            my_secret: kube.SecretKeyRef($.secret, "sec_key"),
+            my_secret: kube.SecretKeyRef($.secret, 'sec_key'),
             other_key: null,
           },
           ports_+: {
             http: { containerPort: 80 },
-            udp_port: { containerPort: 888, protocol: "UDP" },
+            udp_port: { containerPort: 888, protocol: 'UDP' },
           },
           volumeMounts_+: {
-            config_vol: { mountPath: "/config" },
+            config_vol: { mountPath: '/config' },
           },
         },
       },
@@ -129,7 +129,7 @@ local stack = {
 
   // NB: all object below needing to spec a Pod will just
   // use above particular pod manifest just for convenience
-  deploy: kube.Deployment($.name + "-deploy") {
+  deploy: kube.Deployment($.name + '-deploy') {
     local this = self,
     metadata+: { namespace: $.namespace },
     spec+: {
@@ -142,14 +142,14 @@ local stack = {
     },
   },
 
-  deploy_pdb: kube.PodDisruptionBudget($.name + "-deploy-pdb") {
+  deploy_pdb: kube.PodDisruptionBudget($.name + '-deploy-pdb') {
     target_pod: $.deploy.spec.template,
     spec+: {
       minAvailable: 1,
     },
   },
 
-  sts: kube.StatefulSet($.name + "-sts") {
+  sts: kube.StatefulSet($.name + '-sts') {
     metadata+: { namespace: $.namespace },
     spec+: {
       template+: {
@@ -158,22 +158,22 @@ local stack = {
           containers_+: {
             foo_cont+: {
               volumeMounts_+: {
-                datadir: { mountPath: "/foo/data" },
+                datadir: { mountPath: '/foo/data' },
               },
             },
           },
         },
       },
       volumeClaimTemplates_+: {
-        datadir: kube.PersistentVolumeClaim("datadir") {
+        datadir: kube.PersistentVolumeClaim('datadir') {
           metadata+: { namespace: $.namespace },
-          storage: "10Gi",
+          storage: '10Gi',
         },
       },
     },
   },
 
-  ds: kube.DaemonSet($.name + "-ds") {
+  ds: kube.DaemonSet($.name + '-ds') {
     metadata+: { namespace: $.namespace },
     spec+: {
       template+: {
@@ -182,14 +182,14 @@ local stack = {
     },
   },
 
-  job: kube.Job($.name + "-job") {
+  job: kube.Job($.name + '-job') {
     metadata+: { namespace: $.namespace },
     spec+: {
       template+: {
         spec+: {
           containers_+: {
             foo_cont: kube.Container($.name) {
-              image: "busybox",
+              image: 'busybox',
             },
           },
         },
@@ -197,7 +197,7 @@ local stack = {
     },
   },
 
-  cronjob: kube.CronJob($.name + "-cronjob") {
+  cronjob: kube.CronJob($.name + '-cronjob') {
     metadata+: { namespace: $.namespace },
     spec+: {
       jobTemplate+: {
@@ -206,19 +206,19 @@ local stack = {
             spec+: {
               containers_+: {
                 foo_cont: kube.Container($.name) {
-                  image: "busybox",
+                  image: 'busybox',
                 },
               },
             },
           },
         },
       },
-      schedule: "0 * * * *",
+      schedule: '0 * * * *',
     },
   },
 
   // NB: create NSP from $.deploy Pod ref
-  nsp_pods: kube.NetworkPolicy($.name + "-nsp-pods") {
+  nsp_pods: kube.NetworkPolicy($.name + '-nsp-pods') {
     metadata+: { namespace: $.namespace },
     // NB: $.deploy has unique "foo-deploy" label (as well as other
     // podLabelsSelector() arg)
@@ -230,7 +230,7 @@ local stack = {
           from: [
             kube.podLabelsSelector($.job),
             kube.podLabelsSelector($.cronjob),
-            { namespaceSelector: { matchLabels: { name: "nginx-ingress" } } },
+            { namespaceSelector: { matchLabels: { name: 'nginx-ingress' } } },
           ],
           ports: kube.podsPorts([$.deploy]),
         },
@@ -246,26 +246,26 @@ local stack = {
         },
         to_kube_dns: {
           to: [
-            { namespaceSelector: { matchLabels: { name: "kube-system" } } },
+            { namespaceSelector: { matchLabels: { name: 'kube-system' } } },
           ],
-          ports: [{ port: 53, protocol: "UDP" }],
+          ports: [{ port: 53, protocol: 'UDP' }],
         },
       },
     },
   },
   // NB: these VPAs need the VPA CRD added to the cluster, for local k3s testing
   // we add it via the `init-kube` Makefile target using `init-kube.jsonnet`
-  vpa: kube.VerticalPodAutoscaler($.name + "-vpa") {
+  vpa: kube.VerticalPodAutoscaler($.name + '-vpa') {
     spec+: {
       targetRef: {
-        apiVersion: "apps/v1",
-        kind: "Deployment",
-        name: "foo-deploy",
+        apiVersion: 'apps/v1',
+        kind: 'Deployment',
+        name: 'foo-deploy',
       },
     },
   },
   deploy_vpa: kube.createVPAFor($.deploy),
-  tls_cert: bitnami.CertManager.InCluster.Certificate("foo-cert", $.namespace),
+  tls_cert: bitnami.CertManager.InCluster.Certificate('foo-cert', $.namespace),
 };
 
 kube.List() {

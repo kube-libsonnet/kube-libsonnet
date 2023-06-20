@@ -24,7 +24,9 @@ E2E_K3S_VERSIONS=$(K3S_V1_22) $(K3S_V1_23) $(K3S_V1_24) $(K3S_V1_25)
 
 SHELL=/bin/bash
 # Rather arbitrary Bitnami style choice
-JSONNET_FMT=--indent 2 --string-style d --comment-style s --no-pad-arrays --pad-objects --pretty-field-names
+OLD_JSONNET_FMT=--indent 2 --string-style d --comment-style s --no-pad-arrays --pad-objects --pretty-field-names
+# Reset kube-libsonnet/kube-libsonnet to a clean jsonnetfmt (re)start --jjo, 2023-06-20
+JSONNET_FMT=
 
 LIB_JSONNET=$(wildcard ../*.libsonnet)
 # jsonnet manifests for kube-validate target, exercising `kubecfg validate ...`
