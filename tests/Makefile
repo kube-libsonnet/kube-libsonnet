@@ -38,7 +38,7 @@ PROJECT=kubelibsonnet
 tests: $(patsubst %,e2e-tests-%,$(E2E_K3S_VERSIONS))
 	@echo "SUCCESS: verified Kubernetes versions:"
 	@cat $(TMP_RANCHER)/report*.txt
-	@test -n "$${GITHUB_ACTIONS}" || exit 0; mkdir -p github/artifacts && cat $(TMP_RANCHER)/report*.txt >> github/artifacts/report.txt
+	@test -n "$${GITHUB_STEP_SUMMARY}" || exit 0; cat $(TMP_RANCHER)/report*.txt >> "$${GITHUB_STEP_SUMMARY"
 	@rm -rf ./$(TMP_RANCHER)
 
 update-versions:

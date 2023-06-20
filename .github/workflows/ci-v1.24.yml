@@ -15,13 +15,6 @@
                "id": "make_tests",
                "name": "Run v1.24 integration tests via docker-compose",
                "run": "make -C tests e2e-tests-v1.24.14-k3s1\n"
-            },
-            {
-               "name": "Report",
-               "uses": "actions/upload-artifact@v3",
-               "with": {
-                  "path": "github/artifacts/report-v1.24.14-k3s1.txt"
-               }
             }
          ]
       }

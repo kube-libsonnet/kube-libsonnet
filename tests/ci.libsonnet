@@ -25,13 +25,6 @@
             ||| % params,
             id: 'make_tests',
           },
-          {
-            name: 'Report',
-            uses: 'actions/upload-artifact@v3',
-            with: {
-              path: 'github/artifacts/report-%(k3sTag)s.txt' % params,
-            },
-          },
         ],
       },
     },
