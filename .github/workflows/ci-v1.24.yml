@@ -26,7 +26,7 @@
          ]
       }
    },
-   "name": "CI",
+   "name": "CI v1.24",
    "true": [
       "push",
       "pull_request"

@@ -1,6 +1,6 @@
 {
   genCI(params):: {
-    name: 'CI',
+    name: 'CI %(kubeVersion)s' % params,
     'true': [
       'push',
       'pull_request',
