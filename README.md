@@ -10,11 +10,11 @@ Kubernetes releases.
 Accordingly, above `kube-manifests` has been changed to use this repo as
 a git submodule, i.e.:
 
-    $ git submodule add https://github.com/bitnami-labs/kube-libsonnet
+    $ git submodule add https://github.com/kube-libsonnet/kube-libsonnet
     $ cat .gitmodules
     [submodule "lib"]
     path = lib
-    url = https://github.com/bitnami-labs/kube-libsonnet
+    url = https://github.com/kube-libsonnet/kube-libsonnet
 
 ## Testing
 
