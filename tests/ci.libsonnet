@@ -1,12 +1,13 @@
 {
   genCI(params):: {
-    name: 'CI %s' % std.strReplace(params.kubeVersion, '.', '_'),
+    local sanitizedVersion = std.strReplace(params.kubeVersion, '.', '_'),
+    name: 'CI %(kubeVersion)s' % params,
     on: [
       'push',
       'pull_request',
     ],
     jobs: {
-      ['kube-%(kubeVersion)s' % params]: {
+      ['kube %s' % sanitizedVersion]: {
         'runs-on': 'ubuntu-latest',
         steps: [
           {
