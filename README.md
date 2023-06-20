@@ -17,51 +17,55 @@ to include this project as a `vendor/`-ed folder:
 1. Install https://github.com/jsonnet-bundler/jsonnet-bundler
 2. Run:
 
-  $ jb init
-  $ jb install https://github.com/kube-libsonnet/kube-libsonnet
-  $ git add vendor/ jsonnetfile.json jsonnetfile.lock.json
+```shell
+$ jb init
+$ jb install https://github.com/kube-libsonnet/kube-libsonnet
+$ git add vendor/ jsonnetfile.json jsonnetfile.lock.json
+```
 
 3. Create your Kubernetes manifest, for example
 
-  $ cat nginx.jsonnet
-  local kube = import 'vendor/kube-libsonnet/kube.libsonnet';
+```shell
+$ cat nginx.jsonnet
+local kube = import 'vendor/kube-libsonnet/kube.libsonnet';
 
-  local nginx_stack = {
-    nginx_deploy: kube.Deployment('nginx') {
-      spec+: {
-        replicas: 3,
-        template+: {
-          spec+: {
-            containers_+: {
-              nginx: kube.Container('nginx') {
-                image: 'bitnami/nginx:latest',  // NB: you shouldn't use latest in prod ;)
-                resources: { requests: { cpu: '100m', memory: '100Mi' } },
-                env_+: {
-                  NGINX_ENABLE_ABSOLUTE_REDIRECT: 'yes',
-                  NGINX_ENABLE_PORT_IN_REDIRECT: 'yes',
-                },
-                ports_+: { http: { containerPort: 8080 } },
+local nginx_stack = {
+  nginx_deploy: kube.Deployment('nginx') {
+    spec+: {
+      replicas: 3,
+      template+: {
+        spec+: {
+          containers_+: {
+            nginx: kube.Container('nginx') {
+              image: 'bitnami/nginx:latest',  // NB: you shouldn't use latest in prod ;)
+              resources: { requests: { cpu: '100m', memory: '100Mi' } },
+              env_+: {
+                NGINX_ENABLE_ABSOLUTE_REDIRECT: 'yes',
+                NGINX_ENABLE_PORT_IN_REDIRECT: 'yes',
               },
+              ports_+: { http: { containerPort: 8080 } },
             },
           },
         },
       },
     },
-    nginx_svc: kube.Service('nginx') {
-      target_pod: $.nginx_deploy.spec.template,
-    },
-  };
+  },
+  nginx_svc: kube.Service('nginx') {
+    target_pod: $.nginx_deploy.spec.template,
+  },
+};
 
-  // Manifest a kubectl- ingestable JSON (kube.List is not part
-  // of the Kubernetes API itself, but rather a pseudo-object
-  // usable to host Kubernetes objects in its `items: [...]` array.
-  kube.List() {
-    items_+: nginx_stack,
-  }
+// Manifest a kubectl- ingestable JSON (kube.List is not part
+// of the Kubernetes API itself, but rather a pseudo-object
+// usable to host Kubernetes objects in its `items: [...]` array.
+kube.List() {
+  items_+: nginx_stack,
+}
 
-  $ jsonnet nginx.jsonnet|kubeconform -verbose -
-  stdin - Service nginx is valid
-  stdin - Deployment nginx is valid
+$ jsonnet nginx.jsonnet|kubeconform -verbose -
+stdin - Service nginx is valid
+stdin - Deployment nginx is valid
+```
 
 ### git submodule
 Accordingly, above `kube-manifests` has been changed to use this repo as
