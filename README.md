@@ -11,7 +11,7 @@ Kubernetes releases.
 
 Unit and integration tests are run via Github workflows.
 
-Tested Kubernetes versions: v1.22 v1.23 v1.24 v1.25
+Tested Kubernetes versions: [![v1.22](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci-v1.22.yml/badge.svg)](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci-v1.22.yml) [![v1.23](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci-v1.23.yml/badge.svg)](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci-v1.23.yml) [![v1.24](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci-v1.24.yml/badge.svg)](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci-v1.24.yml) [![v1.25](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci-v1.25.yml/badge.svg)](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci-v1.25.yml)
 
 ## Using this repository
 

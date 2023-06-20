@@ -45,7 +45,10 @@ update-versions:
 	rm -f ../.github/workflows/ci-v*.yml
 	jsonnet  -m ../.github/workflows -e '(import "kube-versions.libsonnet").ghWorkflowFiles'
 	echo "E2E_K3S_VERSIONS=$$(jsonnet  -e 'std.join(" ",(import "kube-versions.libsonnet").k3sTags)'|xargs)" > Makefile.versions
-	sed -i '/^Tested Kubernetes versions:/s/:.*/: $(E2E_K8S_VERSIONS)/' ../README.md
+	sed -E -i \
+		-e '/^Tested Kubernetes versions:/s/:.*/: $(E2E_K8S_VERSIONS)/' \
+		-e '/^Tested Kubernetes versions:/s,(v[0-9.]+),[![\1](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci-\1.yml/badge.svg)](https://github.com/kube-libsonnet/kube-libsonnet/actions/workflows/ci-\1.yml),g' \
+		../README.md
 
 # These target is dynamically driven from e2e-test-% above, run as
 # e.g. `e2e-tests-v1.17.2-k3s1`
