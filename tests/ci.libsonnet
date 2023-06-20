@@ -1,7 +1,7 @@
 {
   genCI(params):: {
     local sanitizedVersion = std.strReplace(params.kubeVersion, '.', '_'),
-    name: 'CI %(kubeVersion)s' % params,
+    name: 'CI kube-%(kubeVersion)s' % params,
     on: [
       'push',
       'pull_request',

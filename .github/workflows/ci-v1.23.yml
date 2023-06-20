@@ -19,7 +19,7 @@
          ]
       }
    },
-   "name": "CI v1.23",
+   "name": "CI kube-v1.23",
    "on": [
       "push",
       "pull_request"
