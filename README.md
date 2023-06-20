@@ -7,6 +7,12 @@ This repository was originally forked from Bitnami's
 project on June/2023, in an effort to keep it up-to-date with the latest
 Kubernetes releases.
 
+## Tests
+
+Unit and integration tests are run via Github workflows.
+
+Tested Kubernetes versions: v1.22 v1.23 v1.24 v1.25
+
 ## Using this repository
 
 ### jsonnet-bundler
