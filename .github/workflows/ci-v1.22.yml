@@ -1,6 +1,6 @@
 {
    "jobs": {
-      "kube v1_22": {
+      "kube-v1_22": {
          "runs-on": "ubuntu-latest",
          "steps": [
             {

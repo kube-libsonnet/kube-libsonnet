@@ -7,7 +7,7 @@
       'pull_request',
     ],
     jobs: {
-      ['kube %s' % sanitizedVersion]: {
+      ['kube-%s' % sanitizedVersion]: {
         'runs-on': 'ubuntu-latest',
         steps: [
           {
