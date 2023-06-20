@@ -11,7 +11,7 @@ Kubernetes releases.
 
 ### jsonnet-bundler
 
-You can use https://github.com/jsonnet-bundler/jsonnet-bundler
+You can use [jb](https://github.com/jsonnet-bundler/jsonnet-bundler)
 to include this project as a `vendor/`-ed folder:
 
 1. Install https://github.com/jsonnet-bundler/jsonnet-bundler
